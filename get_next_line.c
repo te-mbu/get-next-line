@@ -77,12 +77,10 @@ int         get_next_line(int fd, char **line)
 {
     static char     *str;
 	int i;
-	int len;
 	char buf[BUFFER_SIZE + 1];
 	char *join_buf;
 	
 	join_buf = NULL;
-	len = 0;
     if (BUFFER_SIZE <= 0 || fd < 0|| !line || read(fd, buf, 0) < 0)
         return (-1);
 	if (str)

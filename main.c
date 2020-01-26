@@ -52,13 +52,12 @@ int	main(int ac, char **av)
 }
 */
 
-int			main(int argc, char **argv)
+int			main()
 {
 	char	*line;
 	int		fd;
 	int		ret;
-	argc = 2;
-	fd = open(argv[1], O_RDONLY);
+	fd = open("txt.txt", O_RDONLY);
 
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
