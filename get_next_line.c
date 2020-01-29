@@ -6,32 +6,17 @@
 /*   By: tembu <tembu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 16:56:22 by tembu             #+#    #+#             */
-/*   Updated: 2020/01/24 16:12:15 by tembu            ###   ########.fr       */
+/*   Updated: 2020/01/29 16:24:22 by tembu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int         ft_line_until_n(char *str)
+static char				*ft_line(char *join_buf)
 {
-    int i;
-
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '\n')
-            return (1);
-        i++;
-    }
-    return (0);
-}     
-
-
-static char		*ft_line(char *join_buf)
-{
-	int i;
-	int j;
-	char *line;
+	int		i;
+	int		j;
+	char	*line;
 
 	i = 0;
 	j = 0;
@@ -51,11 +36,11 @@ static char		*ft_line(char *join_buf)
 	return (line);
 }
 
-static char		*ft_stock_line(char *join_buf)
+static char				*ft_stock_line(char *join_buf)
 {
-	unsigned int i;
-	char *line_to_stock;
-	
+	unsigned int	i;
+	char			*line_to_stock;
+
 	i = 0;
 	if (!join_buf)
 		return (NULL);
@@ -66,44 +51,52 @@ static char		*ft_stock_line(char *join_buf)
 	return (line_to_stock);
 }
 
-static int			ft_free(char *str, int returned)
+static int				ft_free(char *str_to_free, int returned)
 {
-	if (str)
-		free(str);
+	free(str_to_free);
+	str_to_free = NULL;
 	return (returned);
 }
 
-int         get_next_line(int fd, char **line)
+static int				get_next_line2(char *join_buf, char **str, char **line)
 {
-    static char     *str;
-	int i;
-	char buf[BUFFER_SIZE + 1];
-	char *join_buf;
-	
-	join_buf = NULL;
-    if (BUFFER_SIZE <= 0 || fd < 0|| !line || read(fd, buf, 0) < 0)
-        return (-1);
-	if (str)
-		if (!(join_buf = ft_strdup(str)))
-			return (ft_free(join_buf, -1));
-	while (!ft_line_until_n(buf) && (i = read(fd, buf, BUFFER_SIZE)) > 0)
-	{
-		buf[i] = '\0';
-		if (i == 0)
-			return (0);
-		if (!(join_buf = ft_strjoin(join_buf, buf)))
-			return (-1);
-	}
 	if (!(*line = ft_line(join_buf)))
 		return (ft_free(join_buf, -1));
 	if (!ft_line_until_n(join_buf))
+	{
+		free(*str);
+		*str = NULL;
 		return (ft_free(join_buf, 0));
-	if (!(str = ft_stock_line(join_buf)))
+	}
+	free(*str);
+	if (!(*str = ft_stock_line(join_buf)))
 		return (ft_free(join_buf, -1));
-//	printf("buf : %s", buf);
-//	printf("\n------\n");
-//	printf("join_buf : -->%s<--\n", join_buf);
-//	printf("static str : -->%s<--\n\n\n\n", str);
-
+	free(join_buf);
 	return (1);
+}
+
+int						get_next_line(int fd, char **line)
+{
+	static char		*str;
+	int				i;
+	char			buf[BUFFER_SIZE + 1];
+	char			*join_buf;
+
+	join_buf = NULL;
+	if (BUFFER_SIZE <= 0 || fd < 0 || !line || read(fd, buf, 0) < 0)
+		return (-1);
+	if (str)
+		if (!(join_buf = ft_strdup(str)))
+			return (ft_free(join_buf, -1));
+	while (!ft_line_until_n(join_buf) && (i = read(fd, buf, BUFFER_SIZE)) > 0)
+	{
+		buf[i] = '\0';
+		if (!(join_buf = ft_strjoin(join_buf, buf)))
+			return (ft_free(join_buf, -1));
+	}
+	if (i < 0)
+		return (ft_free(join_buf, -1));
+	if (i == 0 && (join_buf == NULL || join_buf[0] == '\0'))
+		return (0);
+	return (get_next_line2(join_buf, &str, line));
 }

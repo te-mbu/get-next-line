@@ -6,7 +6,7 @@
 /*   By: tembu <tembu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 16:57:06 by tembu             #+#    #+#             */
-/*   Updated: 2020/01/24 13:10:39 by tembu            ###   ########.fr       */
+/*   Updated: 2020/01/29 16:24:17 by tembu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,34 @@
 
 char				*ft_strjoin(char *s1, char *s2)
 {
-	size_t		len;
-	size_t		i;
-	size_t		j;
-	char	*string;
+	long int		len;
+	long int		i;
+	long int		j;
+	char			*string;
+	char			s1_new[ft_strlen(s1) + 1];
 
-	i = 0;
-	j = 0;
+	i = -1;
+	j = -1;
 	if (!s1)
 		return (ft_strdup(s2));
 	len = ft_strlen(s1) + ft_strlen(s2);
+	while (s1[++i])
+		s1_new[i] = s1[i];
+	s1_new[i] = '\0';
+	i = -1;
+	free(s1);
 	string = (char *)malloc(sizeof(char) * (len + 1));
 	if (!string)
 		return (NULL);
-	while (i < ft_strlen(s1))
-	{
-		string[i] = s1[i];
-		i++;
-	}
-	while (j < ft_strlen(s2))
-	{
+	while (++i < (long int)ft_strlen(s1_new))
+		string[i] = s1_new[i];
+	while (++j < (long int)ft_strlen(s2))
 		string[i + j] = s2[j];
-		j++;
-	}
 	string[len] = '\0';
 	return (string);
 }
 
-char		*ft_substr(char *s, unsigned int start, unsigned int len)
+char				*ft_substr(char *s, unsigned int start, unsigned int len)
 {
 	char	*string;
 	size_t	i;
@@ -65,7 +65,7 @@ char		*ft_substr(char *s, unsigned int start, unsigned int len)
 	return (string);
 }
 
-char	*ft_strdup(char *src)
+char				*ft_strdup(char *src)
 {
 	int		i;
 	char	*string;
@@ -86,7 +86,7 @@ char	*ft_strdup(char *src)
 	return (string);
 }
 
-size_t			ft_strlen(char *s)
+size_t				ft_strlen(char *s)
 {
 	size_t i;
 
@@ -96,4 +96,20 @@ size_t			ft_strlen(char *s)
 	while (s[i])
 		i++;
 	return (i);
+}
+
+int					ft_line_until_n(char *str)
+{
+	int i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			return (1);
+		i++;
+	}
+	return (0);
 }
