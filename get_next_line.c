@@ -6,7 +6,7 @@
 /*   By: tembu <tembu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 16:56:22 by tembu             #+#    #+#             */
-/*   Updated: 2020/01/29 16:24:22 by tembu            ###   ########.fr       */
+/*   Updated: 2020/01/31 13:13:41 by tembu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,9 @@ int						get_next_line(int fd, char **line)
 	if (i < 0)
 		return (ft_free(join_buf, -1));
 	if (i == 0 && (join_buf == NULL || join_buf[0] == '\0'))
+	{
+		*line = ft_strdup("");
 		return (0);
+	}
 	return (get_next_line2(join_buf, &str, line));
 }
