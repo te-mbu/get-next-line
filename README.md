@@ -1,2 +1,9 @@
-# get-next-line
-This projects is about creating a function that, allows to read a line ending with a newline character ('\n') from a file descriptor, without knowing its size beforehand. One of the goal of this project is to learn a highly interesting new concept in C programming: static variables, and to gain a deeper understanding of allocations, whether they happen on the stack memory or in the heap memory, the manipulation and the life cycle of a buffer, the unexpected complexity implied in the use of one or many static variables.
+# get-next-line - @42Born2Code
+
+A C function that reads any valid file line by line until the end.
+
+## What is get_next_line ?
+
+get_next_line is an individual project at [19](https://www.s19.be/)/[42](https://www.42.fr/) that basically reads a file line by line.
+
+Disclaimer: *There are so many easier methods of doing this by using standard C functions. But the goal here is to be able to do it by using any functions from my libft and only the standard functions* ```read```, ```malloc``` and ```free```.
